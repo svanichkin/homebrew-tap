@@ -1,0 +1,33 @@
+# Keeps Casks/say.rb at Say's latest release: the version and the archives'
+# sha256 (published beside them), checked every few hours or by hand.
+name: update
+on:
+  schedule:
+    - cron: "17 */3 * * *"
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  say:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Follow the latest release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          tag=$(gh release view -R svanichkin/say --json tagName -q .tagName)
+          v=${tag#v}
+          cur=$(sed -n 's/^  version "\(.*\)"/\1/p' Casks/say.rb)
+          [ "$v" = "$cur" ] && { echo "up to date: $v"; exit 0; }
+          base=https://github.com/svanichkin/say/releases/download/$tag
+          arm=$(curl -fsSL $base/say-macos-arm64.zip.sha256 | awk '{print $1}')
+          intel=$(curl -fsSL $base/say-macos-amd64.zip.sha256 | awk '{print $1}')
+          [ ${#arm} = 64 ] && [ ${#intel} = 64 ] || { echo "no checksums for $tag"; exit 1; }
+          sed -i -e "s/^  version \".*\"/  version \"$v\"/" \
+                 -e "s/arm:   \"[0-9a-f]*\"/arm:   \"$arm\"/" \
+                 -e "s/intel: \"[0-9a-f]*\"/intel: \"$intel\"/" Casks/say.rb
+          git config user.name github-actions
+          git config user.email github-actions@users.noreply.github.com
+          git commit -am "say $v"
+          git push

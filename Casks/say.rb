@@ -19,5 +19,4 @@ cask "say" do
   # The same binary in the terminal; Homebrew's bin comes before /usr/bin,
   # so it shadows the system's text-to-speech say.
   binary "#{appdir}/Say.app/Contents/MacOS/say"
-
 end

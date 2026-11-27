@@ -1,9 +1,9 @@
 cask "say" do
   arch arm: "arm64", intel: "amd64"
 
-  version "2.0.5"
-  sha256 arm:   "4515d36781bc3dcbfeb84a67ead0e4e610a7594bf9203748c30f53233e1d4a0d",
-         intel: "ca08835f194b6fc5ef953fceba565a80902089b180030a7235dc3fe54e65749b"
+  version "2.0.7"
+  sha256 arm:   "fd9b430e3d182de022ee723ccf315a6269d629d6e9d84a900cac40ba215debef",
+         intel: "85e37a2bb46469a75bd0b0b917943b2d0003befd90986990b1b004e6a1034553"
 
   url "https://github.com/svanichkin/say/releases/download/v#{version}/say-macos-#{arch}.zip"
   name "Say"

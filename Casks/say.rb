@@ -10,6 +10,8 @@ cask "say" do
   desc "Peer-to-peer video calls over Yggdrasil, in a window or a terminal"
   homepage "https://github.com/svanichkin/say"
 
+  depends_on macos: ">= :tahoe"
+
   livecheck do
     url :url
     strategy :github_latest
